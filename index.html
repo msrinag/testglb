@@ -31,11 +31,16 @@
         light.position.set(1, 1, 1).normalize();
         scene.add(light);
 
+        let model;  // Variable to hold the 3D model
+
         // Load the 3D model
         const loader = new THREE.GLTFLoader();
         loader.load('files/scene.gltf', function (gltf) {
-            scene.add(gltf.scene);
-            gltf.scene.rotation.x = 0.5; // Rotate on X-axis initially
+            model = gltf.scene;
+            scene.add(model);
+
+            // Optional: Adjust model's initial rotation and position
+            model.rotation.x = Math.PI / 4;  // Rotate by 45 degrees on the X-axis
         }, undefined, function (error) {
             console.error('An error occurred while loading the model:', error);
         });
@@ -43,9 +48,19 @@
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
+
+            // Rotate the model if it's loaded
+            if (model) {
+                // Add a slow and random rotation effect
+                model.rotation.x += 0.01;  // Rotate X-axis
+                model.rotation.y += Math.random() * 0.01;  // Rotate Y-axis with random speed
+                model.rotation.z += Math.random() * 0.01;  // Rotate Z-axis with random speed
+            }
+
             renderer.render(scene, camera);
         }
 
+        // Set camera position and start the animation loop
         camera.position.z = 5;
         animate();
     </script>
